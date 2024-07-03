@@ -1,36 +1,27 @@
-import setuptools
-from setuptools import find_packages  # Explicit import for clarity
+from setuptools import find_packages,setup
+from typing import List
 
-def readme():
-    """Read the README.md file for the long description."""
-    with open('README.md', 'r', encoding='utf-8') as f:
-        return f.read()
+HYPEN_E_DOT='-e .'
+def get_requirements(file_path:str)->List[str]:
+    '''
+    this function will return the list of requirements
+    '''
+    requirements=[]
+    with open(file_path) as file_obj:
+        requirements=file_obj.readlines()
+        requirements=[req.replace("\n","") for req in requirements]
 
-setuptools.setup(
-    name='mlproject',
-    version='0.0.1',
-    author='Hamza Rafqiue',  
-    author_email='hamzarafique964@gmail.com',  
-    description='A short description of your machine learning project',
-    long_description=readme(),
-    long_description_content_type='text/markdown',
-    url='https://github.com/Hamza-Rafique/mlproject', 
-    packages=find_packages(exclude=['tests.*', '*.tests', '*.test']),  # Exclude tests
-    classifiers=[
-        'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
-    ],
-    python_requires='>=3.6',  # Specify minimum Python version required
-    install_requires=[
-         'numpy', 'pandas', 'seaborn'
-    ],
-    extras_require={
-        # Optional dependencies (e.g., 'dev': ['pytest', 'mypy'])
-    },
-    entry_points={
-        'console_scripts': [
-            'mlproject=mlproject.cli:main',  # Example entry point (replace with your script)
-        ],
-    },
+        if HYPEN_E_DOT in requirements:
+            requirements.remove(HYPEN_E_DOT)
+    
+    return requirements
+
+setup(
+name='mlproject',
+version='0.0.1',
+author='Hamza Rafique',
+author_email='hamzarafique964@gmail.com',
+packages=find_packages(),
+install_requires=get_requirements('requirements.txt')
+
 )
